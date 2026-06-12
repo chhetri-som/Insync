@@ -5,9 +5,9 @@ import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Entity
@@ -33,11 +33,11 @@ public class PhotoMetadata {
 
     // GPS latitude
     @Column(precision = 10, scale = 7)
-    private Double latitude;
+    private BigDecimal latitude;
 
     // GPS longitude from EXIF. Null if not present or stripped
     @Column(precision = 10, scale = 7)
-    private Double longitude;
+    private BigDecimal longitude;
 
     // K-Means dominant colors
     @JdbcTypeCode(SqlTypes.JSON)

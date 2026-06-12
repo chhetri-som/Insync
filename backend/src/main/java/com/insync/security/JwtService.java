@@ -3,7 +3,6 @@ package com.insync.security;
 import com.insync.domain.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +26,7 @@ public class JwtService {
     @Value("${insync.jwt.expiry-ms:86400000}")
     private long accessTokenExpiryMs;
 
-    @Value("${insync.jwt.refresh-expire-ms:604800000}")
+    @Value("${insync.jwt.refresh-expiry-ms:604800000}")
     private long refreshTokenExpiryMs;
 
     public String generateAccessToken(UserDetails userDetails) {
@@ -49,6 +49,7 @@ public class JwtService {
                 .subject(userDetails.getUsername()) // email
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expiryMs))
+                .signWith(getSigningKey())
                 .compact();
     }
 
@@ -86,7 +87,7 @@ public class JwtService {
     }
 
     private SecretKey getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
