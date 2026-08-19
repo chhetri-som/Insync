@@ -1,8 +1,5 @@
 # Insync — Java / Spring Boot Backend Specification
 
-> A reference document for building the Insync photobook backend.
-> Read this before touching any code.
-
 ---
 
 ## 1. Technology Decisions
