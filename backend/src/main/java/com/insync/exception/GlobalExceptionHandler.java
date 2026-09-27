@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -69,14 +71,29 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.CONFLICT, ex.getMessage(), request);
     }
 
+    // 413 Payload Too Large
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ErrorResponse> handleFileTooLarge(
+            MaxUploadSizeExceededException ex, HttpServletRequest request) {
+        return build(HttpStatus.PAYLOAD_TOO_LARGE,
+                "File size exceeds the 20MB limit per file.", request);
+    }
+
     // 500 Internal Server Error
+    @ExceptionHandler(ProcessingException.class)
+    public ResponseEntity<ErrorResponse> handleProcessing(
+            ProcessingException ex, HttpServletRequest request) {
+        log.error("Processing error on [{}]: {}", request.getRequestURI(), ex.getMessage(), ex);
+        return build(HttpStatus.INTERNAL_SERVER_ERROR, "File processing failed.", request);
+    }
+
+    // Unhandled Exceptions
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleAll(
             Exception ex, HttpServletRequest request) {
         log.error("Unhandled exception on [{}]", request.getRequestURI(), ex);
         return build(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", request);
     }
-
 
     // helper
     private ResponseEntity<ErrorResponse> build(HttpStatus status, String message, HttpServletRequest request) {
