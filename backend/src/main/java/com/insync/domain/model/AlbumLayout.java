@@ -28,6 +28,7 @@ public class AlbumLayout {
     private Album album;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "layout_type", nullable = false, length = 20)
     private LayoutType layoutType;
 

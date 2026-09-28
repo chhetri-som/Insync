@@ -3,6 +3,8 @@ package com.insync.domain.model;
 import com.insync.domain.enums.PhotoProcessingStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -37,6 +39,7 @@ public class Photo{
     private String thumbnailStorageKey;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "processing_status", nullable = false, length = 50)
     @Builder.Default
     private PhotoProcessingStatus processingStatus = PhotoProcessingStatus.PENDING;

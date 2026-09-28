@@ -4,6 +4,8 @@ import com.insync.domain.enums.AlbumStatus;
 import com.insync.domain.enums.AlbumStyle;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -31,10 +33,12 @@ public class Album {
     private String title;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(nullable = false, length = 50)
     private AlbumStyle style;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(nullable = false, length = 50)
     @Builder.Default
     private AlbumStatus status = AlbumStatus.DRAFT;
