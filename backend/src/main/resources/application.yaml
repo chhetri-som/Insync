@@ -63,6 +63,12 @@ insync:
     core-pool-size: ${ASYNC_POOL_SIZE}
     max-pool-size: 8
     queue-capacity: 500
+  polish:
+    equalization-strength: 0.6
+    sharpen-amount: 0.6
+    sharpen-sigma: 1.5
+    max-dimension: 4092
+    jpeg-quality: 92
 
 server:
   port: 8080
